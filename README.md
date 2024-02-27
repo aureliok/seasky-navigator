@@ -10,11 +10,11 @@
 - [Future Improvements](#future-improvements)
 
 ## Introduction
-This small project started as a simple way I've found to have a little more practice on the C# programming language, and the initial idea was to just get practical experience on using consuming public available RestAPIs on a .NET framework, and start building a portfolio to consolidate and showcase skills that I've been studying recently.
+This small project started as a simple way I found to have a little more practice in the C# programming language. The initial idea was to gain practical experience in consuming publicly available REST APIs on a .NET framework and to start building a portfolio to consolidate and showcase some of the skills that I've been studying recently.
 <br><br>
-Naming it "SeaSky Navigator", the core idea of the app is simple and perhaps a project that many beginners may have done it at some point in their study journey: a app that gives prediction of the weather.
+Naming it "SeaSky Navigator," the core idea of the app is simple and perhaps a project that many beginners may have undertaken at some point in their study journey: an app that provides weather predictions.
 <br><br>
-There is a little twist to this one, though. The app is using the capabilities of a LLM (namely the ChatGPT 3.5 Turbo form OpenAI) to deliver the weather report in a pirate speak. It is done in good fun, and helped me feel a little more comfortable on using the .NET environment and with OOP (Object Oriented Programming) with C#.
+There is a little twist to this one, though. The app is using the capabilities of an LLM (specifically, the ChatGPT 3.5 Turbo from OpenAI) to deliver the weather report in pirate speak. It is done in good fun and helped me feel a little more comfortable using the .NET environment and with Object-Oriented Programming (OOP) in C#.
 
 ## APIs Used
 - [Open-Meteo](https://open-meteo.com/): for weather forecasts
@@ -23,24 +23,24 @@ There is a little twist to this one, though. The app is using the capabilities o
 
 
 ## App Overview
-As a beginner, I've decided to start using a public API of weather forecast, **Open-Meteo**, to build a simple console app in which the user would input the location it wanted, and the days to get the weather forecast on.
+As a beginner, I've decided to start using a public API for weather forecasts, **Open-Meteo**, to build a simple console app in which the user would input the desired location and the number of days to get the weather forecast.
 <br><br>
-Though, to be able to get the prediction from Open-Meteo API, one needs to pass the coordinates of both latitude and longitude on the request method. It would be an inconvenience to the user if he had to search these coordinates somewhere else, and then pass it to the app. So to solve this little problem, the app is instructed to use another free API from **PositionStack** to get the coordinates from the user's input.
+However, to obtain predictions from the Open-Meteo API, one needs to pass the coordinates of both latitude and longitude in the request method. It would be inconvenient for the user to search for these coordinates elsewhere and then pass them to the app. To solve this issue, the app is designed to use another free API from PositionStack to get the coordinates from the user's input.
 <br><br>
 ![Asking for Location](assets/seaskynavigator_location.jpg)
 <br><br>
-After getting the location's coordinates returned with the Position Stack's API (and check if the location is valid), the next step is to ask the user for a date and how many days from that date he wants to get his weather forecast on. For example, 2024-02-26 and 2 days would mean we would return the user a report on the forecast of the days ranging from 2024-02-26 to 2024-02-28. <br>
-In this part there's also a check to see if the user has passed a valid date, meaning it has to be on a format "yyyy-MM-dd" and also to see if the range of dates he wants doesn't exceed 7 days from the current day (not the date he inputted). The limit of 7 days from the current date is to prevent the possibility of the app to return null values on the forecast on those days that are farther on the future.
+After obtaining the location's coordinates returned by the **Position Stack**'s API (and checking if the location is valid), the next step is to ask the user for a date and how many days from that date they want to receive their weather forecast. For example, specifying "2024-02-26" and "2 days" would mean returning a report on the forecast for the days ranging from "2024-02-26" to "2024-02-28. <br>
+In this part, there's also a check to see if the user has provided a valid date, meaning it has to be in the format "yyyy-MM-dd," and also to see if the range of dates they want doesn't exceed 7 days from the current day (not the date they inputted). The limit of 7 days from the current date is to prevent the app from returning null values for forecasts on days further into the future.
 <br><br>
 ![Asking for dates](assets/seaskynavigator_dates.jpg)
 <br><br>
-With these information on hand, the app will then call the Open-Meteo API to get the JSON response on the forecast values. As of now, the app is receiving the data on temperature, apparent temperature, relative humidity and precipitation probability to build it's report.<br>
-On the earlier stages of the app, these weather data would only be printed in tabular-like form on the console, but it seemed like an uninteresting way to do this. So the app is told to call the *OpenAI*'s API to use the **ChatGPT 3.5 Turbo** (the model can be changed) and feed it first with a initial prompt instructing the LLM that it will receive a string containing weather related data and that it should use those data to build an answer like a pirate and give the user a summarized forecast for each day the user requested. The connection to the OpenAI API is made using a unofficial NuGet package called OpenAI by OkGoDolt.
+With this information on hand, the app will then call the Open-Meteo API to get the JSON response on the forecast values. Currently, the app is receiving data on temperature, apparent temperature, relative humidity, and precipitation probability to build its report.<br>
+In the earlier stages of the app, these weather data would only be printed in a tabular-like form on the console, but it seemed like an uninteresting way to present this information. So, the app is instructed to call the **OpenAI** API to use the ChatGPT 3.5 Turbo (the model can be changed) and feed it first with an initial prompt instructing the language model that it will receive a string containing weather-related data and that it should use that data to generate an answer in pirate speak, giving the user a summarized forecast for each day they requested. The connection to the OpenAI API is established using an unofficial NuGet package called OpenAI by OkGoDolt.
 <br><br>
 ![Calling LLM](assets/seaskynavigator_gettingllm.jpg)
 ![Summarized report by LLM](assets/seaskynavigator_llmresponse.jpg)
 <br><br>
-After this, the app asks the user if he wants to get another forecast or quit. If he asks for another forecast, then all the process of asking the location, dates etc will be restarted.
+After this, the app asks the user if they want to get another forecast or quit. If they ask for another forecast, then the entire process of asking for the location, dates, etc., will be restarted.
 <br>
 ![End of interaction](assets/seaskynavigator_endloop.jpg)
 
@@ -50,21 +50,25 @@ In summary, the app's flow looks something like this:
 
 ## App .CS Files
 ### WeatherService.cs
-Contains the class WeatherService, which implements the interface IDisposable. Responsible to use a HttpClient instance to make a async request on the Open-Meteo's API to get the forecast data.
+This file contains the WeatherService class, which implements the IDisposable interface. It is responsible for using an HttpClient instance to make an asynchronous request to the Open-Meteo API, fetching forecast data.
 
 ### WeatherForecast.cs
-Contains the code for the classes WeatherForecast, HourlyUnits, and specially the Hourly class, that will be used to store the data received from the Open-Meteo's API.
+Within this file, you'll find the code for the WeatherForecast class, HourlyUnits, and, notably, the Hourly class. These classes are designed to store the data received from the Open-Meteo API.
 
 ### CoordinatesGetter.cs
-Contains the code for the class CoordinatesGetter that implements the IDisposable interface. Like the WeatherService class, it is responsible to use a HttpClient instance to make a call to an API, this time to the PositionStack. Needs an api key setted on the environment variables (POSITIONSTACK_API_KEY) to work.
+This file holds the code for the CoordinatesGetter class, which implements the IDisposable interface. Similar to the WeatherService class, it utilizes an HttpClient instance to make a call to the PositionStack API. To function correctly, an API key must be set in the environment variables (POSITIONSTACK_API_KEY).
 
 ### LLMChat.cs
-Contains the class LLMChat that is used to initialize an conversation instance with a LLM model, and then feed the data to get the summarized final report. Also needs an api key on the environment variables (OPENAI_API_KEY) to work.
+Contained in this file is the LLMChat class, used to initialize a conversation instance with an LLM model. It facilitates feeding data to obtain a summarized final report. To function correctly, an API key must be set in the environment variables (OPENAI_API_KEY).
 
 ## Future Improvements
-As my first project on a .NET framework and with C# language, this project has space for improvements and corrections that I would like to do in the future, such as:
-- Removal of warnings on null references, as it is not handled extensively in the code;
-- Handling of exceptions, as this is not something that is in the code yet, there are checks for formats and valid values, but doesn't have Exception handling for, say, a empty response for the calls made on the APIs;
-- Better structuring and organization of code. The Program.cs have some functions that could be perhaps better fitted on a file for helper methods;
-- A friendlier interface. I hope to be able to do this one soon, as I study more of HTML and CSS. And will be a great start point to practice building a RESTful API and get familiar with the ASP.NET framework.
+As my first project on a .NET framework and with the C# language, this project has room for improvements and corrections that I would like to implement in the future. These include:
+
+- Removal of warnings on null references: Currently, null references are not handled extensively in the code. Addressing this will enhance the overall robustness of the application.
+
+- Handling of exceptions: While there are checks for formats and valid values, exception handling for scenarios like an empty response from the APIs is not implemented yet. Incorporating proper exception handling will contribute to better error management.
+
+- Better structuring and organization of code: In the current state, some functions in Program.cs could potentially be better organized into separate files for helper methods. This restructuring will improve code readability and maintainability.
+
+- A friendlier interface: Future plans involve creating a more user-friendly interface. As I delve into HTML and CSS, I aim to practice building a RESTful API and familiarize myself with the ASP.NET framework. This step will contribute to a more intuitive and visually appealing user experience.
 
