@@ -18,7 +18,7 @@ namespace SeaSkyNavigator.Classes
             _httpClient = new HttpClient();
             DaysToForecast = daysToForecast;
             StartDate = startDate;
-            EndDate = DateTime.Today.AddDays(daysToForecast).ToString("yyyy-MM-dd");
+            EndDate = DateTime.Parse(startDate).AddDays(daysToForecast).ToString("yyyy-MM-dd");
         }
 
         public void Dispose()

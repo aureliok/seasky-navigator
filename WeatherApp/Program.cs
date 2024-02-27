@@ -25,19 +25,20 @@ namespace SeaSkyNavigator
             int daysAheadForecast;
             string forecastDataString;
 
-            Console.WriteLine("      ____             ____  _                      ");
-            Console.WriteLine("     / ___|  ___  __ _/ ___|| | ___   _             ");
-            Console.WriteLine("     \\___ \\ / _ \\/ _` \\___ \\| |/ / | | |            ");
-            Console.WriteLine("      ___) |  __/ (_| |___) |   <| |_| |            ");
-            Console.WriteLine("     |____/ \\___|\\__,_|____/|_|\\_\\__, |            ");
-            Console.WriteLine("      _   _             _         |___/             ");
-            Console.WriteLine("     | \\ | | __ ___   _(_) __ _  __ _| |_ ___  _ __ ");
-            Console.WriteLine("     |  \\| |/ _` \\ \\ / / |/ _` |/ _` | __/ _ \\| '__|");
-            Console.WriteLine("     | |\\  | (_| |\\ V /| | (_| | (_| | || (_) | |   ");
+            Console.WriteLine("      ____             ____  _                             ");
+            Console.WriteLine("     / ___|  ___  __ _/ ___|| | ___   _                    ");
+            Console.WriteLine("     \\___ \\ / _ \\/ _` \\___ \\| |/ / | | |              ");
+            Console.WriteLine("      ___) |  __/ (_| |___) |   <| |_| |                   ");
+            Console.WriteLine("     |____/ \\___|\\__,_|____/|_|\\_\\__, |                ");
+            Console.WriteLine("      _   _             _         |___/                    ");
+            Console.WriteLine("     | \\ | | __ ___   _(_) __ _  __ _| |_ ___  _ __       ");
+            Console.WriteLine("     |  \\| |/ _` \\ \\ / / |/ _` |/ _` | __/ _ \\| '__|   ");
+            Console.WriteLine("     | |\\  | (_| |\\ V /| | (_| | (_| | || (_) | |        ");
             Console.WriteLine("     |_| \\_|\\__,_| \\_/ |_|\\__, |\\__,_|\\__\\___/|_|   ");
-            Console.WriteLine("                          |___/                      ");
+            Console.WriteLine("                          |___/                            ");
 
-
+            Console.WriteLine("============================================================");
+            Console.WriteLine();
             Console.WriteLine("=> Ahoy there! Welcome to the SeaSky Navigator, me hearty!");
             Console.WriteLine($"=> The present moment be upon us is {DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")} | {localTimeZone.DisplayName}");
 
@@ -60,12 +61,7 @@ namespace SeaSkyNavigator
                 else
                     address = userInput;
 
-                dateForecast = AskUserForecastDate();
-                daysAheadForecast = AskUserForecastRange();
-
                 weatherCoordinatesGetter = new CoordinatesGetter();
-                weatherService = new WeatherService(dateForecast, daysAheadForecast);
-
                 Task<string> coordinatesResponse = weatherCoordinatesGetter.GetCoordinates(address);
                 Location? location = JsonSerializer.Deserialize<Location>(coordinatesResponse.Result);
 
@@ -75,9 +71,16 @@ namespace SeaSkyNavigator
 
                 locationData = location.data[0];
 
+                dateForecast = AskUserForecastDate();
+                daysAheadForecast = AskUserForecastRange();
+                daysAheadForecast = CheckForecastRangeLastDate(dateForecast, daysAheadForecast);
+
+                weatherService = new WeatherService(dateForecast, daysAheadForecast);
+
                 Task<string> weatherResponse = weatherService.GetWeatherData(locationData.latitude, locationData.longitude);
                 WeatherForecast? weatherForecast = JsonSerializer.Deserialize<WeatherForecast>(weatherResponse.Result);
 
+                //if (DateTime.Parse(dateForecast).Date <= DateTime.Today.Date)
                 KeepOnlyActualForecast(hourlyForecast, weatherForecast);
 
                 forecastDataString = CreateForecastDataString(hourlyForecast);
@@ -118,6 +121,16 @@ namespace SeaSkyNavigator
             return isValidDate;
         }
 
+        private static bool CheckOnRangeUserDate(string userInputDate)
+        {
+            DateTime maxDate = DateTime.Today.AddDays(8);
+            DateTime userDate = DateTime.Parse(userInputDate);
+
+            bool dateOnRange = userDate <= maxDate;
+
+            return dateOnRange;
+        }
+
 
         private static string AskUserForecastDate()
         {
@@ -132,13 +145,40 @@ namespace SeaSkyNavigator
                 userInputDate = DateTime.Now.ToString("yyyy-MM-dd");
 
             bool isValidDate = CheckValidityUserDate(userInputDate);
+            bool isOnRangeDate = CheckOnRangeUserDate(userInputDate);
 
             if (isValidDate == true)
-                return userInputDate;
+                if (isOnRangeDate == true)
+                    return userInputDate;
+                else
+                    Console.WriteLine("Avast ye! The date be beyond the horizon for forecasts. Best be providin' " +
+                                      "a date within 7 days from today, lest ye want the winds to play tricks on yer forecast!");
+
 
             Console.WriteLine("=> Arrr! The date ye provided be as slippery as an eel. Try again, and mind the format: yyyy-mm-dd");
             return AskUserForecastDate();
             
+        }
+
+        private static int CheckForecastRangeLastDate(string startDate, int days)
+        {
+            DateTime userDate = DateTime.Parse(startDate);
+            DateTime lastDate = userDate.AddDays(days);
+            DateTime maxDate = DateTime.Today.AddDays(7);
+
+            if (lastDate <= maxDate)
+                return days;
+            else
+            {
+                TimeSpan maxDaysRange = maxDate - userDate;
+                int maxDateDiffDays = maxDaysRange.Days;
+
+                Console.WriteLine($"Arrr! Can't glimpse into the far reaches of the future, me heartie. " +
+                                  $"I can spy up to {maxDateDiffDays} days ahead, and no further!");
+
+
+                return maxDateDiffDays;
+            }
         }
 
         private static int AskUserForecastRange()
@@ -194,14 +234,14 @@ namespace SeaSkyNavigator
         {
             int indexToKeep = weatherForecast.hourly.time.FindIndex(stringTime => DateTime.Parse(stringTime) >= DateTime.Now);
 
-            if (indexToKeep > 0)
-            {
-                hourlyForecast.time = weatherForecast.hourly.time.Skip(indexToKeep).ToList();
-                hourlyForecast.temperature_2m = weatherForecast.hourly.temperature_2m.Skip(indexToKeep).ToList();
-                hourlyForecast.apparent_temperature = weatherForecast.hourly.apparent_temperature.Skip(indexToKeep).ToList();
-                hourlyForecast.relative_humidity_2m = weatherForecast.hourly.relative_humidity_2m.Skip(indexToKeep).ToList();
-                hourlyForecast.precipitation_probability = weatherForecast.hourly.precipitation_probability.Skip(indexToKeep).ToList();
-            }
+            if (indexToKeep < 0)
+                indexToKeep = 0;
+            
+            hourlyForecast.time = weatherForecast.hourly.time.Skip(indexToKeep).ToList();
+            hourlyForecast.temperature_2m = weatherForecast.hourly.temperature_2m.Skip(indexToKeep).ToList();
+            hourlyForecast.apparent_temperature = weatherForecast.hourly.apparent_temperature.Skip(indexToKeep).ToList();
+            hourlyForecast.relative_humidity_2m = weatherForecast.hourly.relative_humidity_2m.Skip(indexToKeep).ToList();
+            hourlyForecast.precipitation_probability = weatherForecast.hourly.precipitation_probability.Skip(indexToKeep).ToList();  
         }
 
         private static void PrintForecast(LocationData locationData, Hourly hourly)
