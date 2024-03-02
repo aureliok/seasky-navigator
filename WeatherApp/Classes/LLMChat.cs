@@ -40,17 +40,19 @@ namespace SeaSkyNavigator.Classes
 
         }
 
-        public async Task GiveMeTheWeatherReportMate(string weatherDataString, string location)
+        public async Task<string> GiveMeTheWeatherReportMate(string weatherDataString, string location)
         {
             string messageInput = location + Environment.NewLine + weatherDataString;
             Chat.AppendUserInput(messageInput);
             string weatherReport = await Chat.GetResponseFromChatbotAsync();
-            weatherReport += Environment.NewLine;
+            //weatherReport += Environment.NewLine;
 
-            Console.WriteLine();
-            Console.WriteLine("=====================================================================");
-            Console.WriteLine();
-            Console.WriteLine(weatherReport);
+            //Console.WriteLine();
+            //Console.WriteLine("=====================================================================");
+            //Console.WriteLine();
+            //Console.WriteLine(weatherReport);
+
+            return weatherReport;
         }
 
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SeaSkyNavigator.Classes
 {
-    internal class CoordinatesGetter : IDisposable
+    public class CoordinatesGetter : IDisposable
     {
         private string? ApiKey = Environment.GetEnvironmentVariable("POSITIONSTACK_API_KEY");
         private string? ApiUrl;
