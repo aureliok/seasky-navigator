@@ -1,0 +1,85 @@
+﻿body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #a0c2db;
+}
+
+.top-dialog {
+    position: absolute;
+    top: 20px;
+    left: 30%;
+    right: 30%;
+    font-size: 1.8em;
+    text-align: center;
+    /* word-wrap: break-word; */
+}
+
+.input-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 40px;
+    width: 65vw;
+    height: 50vh;
+    padding: 10px 20px;
+    font-size: 1.3em;
+}
+
+.location-input-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    /* font-size: 1.3em; */
+}
+
+#location-input {
+    width: 70%;
+    height: 30px;
+    border: 0;
+    border-bottom: 2px solid #000;
+    text-align: center;
+    background-color: #fff;
+    font-size: 1.15em;
+}
+
+.request-day-forecast-text {
+    text-align: center;
+    display: block;
+    margin: 20px 50px;
+}
+
+.date-input-div {
+    display: flex;
+    flex-direction: column;
+    margin-right: 120px;
+}
+
+.days-forecast-div {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-input-label, .days-forecast-label {
+    margin-bottom: 10px;
+}
+
+.date-and-forecast-div {
+    display: flex;
+}
+
+.submit-btn {
+    display: flex;
+    margin-top: 10vh;
+    border-radius: 50px;
+    height: 65px;
+    width: 190px;
+    align-items: center;
+    font-weight: bold;
+    font-size: 0.8em;
+    cursor: pointer;
+}

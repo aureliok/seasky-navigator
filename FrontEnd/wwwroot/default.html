@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles.css" />
+    <title>SeaSky Navigator</title>
+</head>
+<body>
+    <main>
+        <div class="top-dialog">
+            Ahoy there! Welcome to the <strong>SeaSky Navigator</strong>, me hearty!
+        </div>
+
+            <section class="input-section">
+                <div class="location-input-div">
+                    <p>
+                        Kindly share yer <strong>whereabouts</strong>, me matey. Where be ye sailin' today?
+                    </p>
+                    <input class="location-input" id="location-input" type="text" required></input>
+                </div>
+
+                    <p class="request-day-forecast-text" id="request-day-forecast-text">
+                        Avast, me heartie! Share with me the <strong>day</strong> ye seek<br> to peer into the weather's secrets 
+                        and the <strong>number of days</strong> henceforth ye wish to include in the grand report. Yarrr!
+                    </p>
+
+                <div class="date-and-forecast-div">
+                    <div class="date-input-div">
+                        <label for="date-input" class="date-input-label">Start Forecast date</label>
+                        <input class="date-input" id="date-input" type="date"></input>
+                    </div>
+
+                    <div class="days-forecast-div">
+                        <label for="days-forecast-input" class="days-forecast-label"># days</label>
+                        <input 
+                            class="days-forecast-input" 
+                            id="days-forecast-input" 
+                            type="number" 
+                            value="0"
+                            max="7"></input>
+                    </div>
+                </div>
+
+                <button class="submit-btn" id="submit-btn" type="submit">Give me the report, matey!</button>
+            </section>
+    </main>
+
+    <script src="./script.js"></script>
+</body>
+</html>
