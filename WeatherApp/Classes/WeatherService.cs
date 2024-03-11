@@ -13,12 +13,12 @@ namespace SeaSkyNavigator.Classes
         public string EndDate;
         public int DaysToForecast;
 
-        public WeatherService(string startDate, int daysToForecast)
+        public WeatherService(string startDate, string daysToForecast)
         {
             _httpClient = new HttpClient();
-            DaysToForecast = daysToForecast;
+            DaysToForecast = int.Parse(daysToForecast);
             StartDate = startDate;
-            EndDate = DateTime.Parse(startDate).AddDays(daysToForecast).ToString("yyyy-MM-dd");
+            EndDate = DateTime.Parse(StartDate).AddDays(DaysToForecast).ToString("yyyy-MM-dd");
         }
 
         public void Dispose()

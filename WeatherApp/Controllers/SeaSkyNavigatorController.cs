@@ -16,7 +16,7 @@ namespace SeaSkyNavigator.Controllers
     [EnableCors("_myAllowSpecificOrigins")]
     public class SeaSkyNavigatorController : ControllerBase
     {
-        private readonly CoordinatesGetter _coordinatesGetter;
+        private CoordinatesGetter _coordinatesGetter;
         private WeatherService _weatherService;
         private LocationData locationData;
         private Hourly hourlyForecast = new Hourly();
@@ -46,7 +46,7 @@ namespace SeaSkyNavigator.Controllers
         /// </remarks>
         /// <returns></returns>
 
-        [HttpPost]
+        [HttpGet]
         [Route("GiveMeTheForecastMate")]
         [SwaggerOperation(Summary = "Get a weather report from our SeaSky Navigator")]
         [SwaggerResponse(200, "Success")]
@@ -60,7 +60,7 @@ namespace SeaSkyNavigator.Controllers
             string startDate,
             [FromQuery]
             [Required]
-            int daysAheadForecast)
+            string daysAheadForecast)
         {
             Task<string> coordinatesResponse = _coordinatesGetter.GetCoordinates(address);
             Location? location = JsonSerializer.Deserialize<Location>(coordinatesResponse.Result);

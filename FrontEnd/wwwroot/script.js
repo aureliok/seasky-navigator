@@ -5,6 +5,7 @@ const locationInput = document.getElementById("location-input");
 const startDateInput = document.getElementById("start-date-input");
 const endDateInput = document.getElementById("end-date-input");
 const getReportBtn = document.getElementById("get-report-btn");
+const weatherReportText = document.getElementById("weatherReportText");
 
 const getStartEndDatesDifference = (start, end) => {
     const startD = new Date(start);
@@ -22,54 +23,22 @@ const preProcessLocation = location => {
 };
 
 const sendApiRequest = (dataObj) => {
-    // const apiUrl = 'https://localhost:7009/SeaSkyNavigator/GiveMeTheForecastMate';
-    // const apiUrl = 'https://localhost:7009/SeaSkyNavigator/GiveMeTheForecastMate?address=barcelona&startDate=2024-03-15&daysAheadForecast=0'
+    const apiUrl = 'https://localhost:7009/SeaSkyNavigator/GiveMeTheForecastMate';
 
-    const apiUrl = 'http://api.positionstack.com/v1/forward';
-    const apiKey = '9a79baffc457faf0e909a4ef44cdb8e9'; // Replace with your actual API key
-    const address = 'barcelona';
+    console.log(JSON.stringify(dataObj));
 
-    const requestUrl = `${apiUrl}?access_key=${apiKey}&query=${address}`;
-    console.log(requestUrl);
-    fetch(requestUrl)
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
-
-    // fetch(apiUrl, {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify(dataObj),
-    // }) 
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error(`Response status: ${response.status}`);
-    //         }
-    //         return response.json();
-    //     })
-    //     .then(responseData => {
-    //         console.log(responseData);
-    //     })
-    //     .catch(error => {
-    //         console.error(error.message);
-    //     });
-
-    // $.ajax({
-    //     url: apiUrl,
-    //     method: 'POST',
-    //     contentType: 'application/json',
-    //     data: JSON.stringify(dataObj),
-    //     success: function(data) {
-    //       // Handle the success response
-    //       console.log(data);
-    //     },
-    //     error: function(xhr, textStatus, errorThrown) {
-    //       // Handle errors
-    //       console.error('Error:', errorThrown);
-    //     }
-    //   });
+    const urlWithParams = new URL(apiUrl);
+    Object.keys(dataObj).forEach(key => urlWithParams.searchParams.append(key, dataObj[key]));
+    
+    // Making the GET request
+    fetch(urlWithParams)
+      .then(response => response.text())
+        .then(data => {
+          // clean output text
+          console.log(data);
+          weatherReportText.innerHTML = data;
+        })
+      .catch(error => console.error('Error:', error));
 };
 
 
@@ -86,17 +55,14 @@ const getReport = () => {
         return;
     }
 
-    // if (endDateInput.value) {
-    //     endDate = startDate;
-    // }
 
     const daysReport = getStartEndDatesDifference(startDate, endDate);
     const locationCleaned = preProcessLocation(location);
 
     const requestData = {
-        "address": locationCleaned,
-        "startDate": startDate,
-        "daysAheadForecast": daysReport
+        address: locationCleaned,
+        startDate: startDate,
+        daysAheadForecast: daysReport
     };
 
     sendApiRequest(requestData);

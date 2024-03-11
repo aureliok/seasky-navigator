@@ -73,9 +73,9 @@ namespace SeaSkyNavigator
 
                 dateForecast = AskUserForecastDate();
                 daysAheadForecast = AskUserForecastRange();
-                daysAheadForecast = CheckForecastRangeLastDate(dateForecast, daysAheadForecast);
+                daysAheadForecast = CheckForecastRangeLastDate(dateForecast, daysAheadForecast.ToString());
 
-                weatherService = new WeatherService(dateForecast, daysAheadForecast);
+                weatherService = new WeatherService(dateForecast, daysAheadForecast.ToString());
 
                 Task<string> weatherResponse = weatherService.GetWeatherData(locationData.latitude, locationData.longitude);
                 WeatherForecast? weatherForecast = JsonSerializer.Deserialize<WeatherForecast>(weatherResponse.Result);
@@ -160,14 +160,15 @@ namespace SeaSkyNavigator
             
         }
 
-        private static int CheckForecastRangeLastDate(string startDate, int days)
+        private static int CheckForecastRangeLastDate(string startDate, string days)
         {
+            int parsedDays = int.Parse(days);
             DateTime userDate = DateTime.Parse(startDate);
-            DateTime lastDate = userDate.AddDays(days);
+            DateTime lastDate = userDate.AddDays(parsedDays);
             DateTime maxDate = DateTime.Today.AddDays(7);
 
             if (lastDate <= maxDate)
-                return days;
+                return parsedDays;
             else
             {
                 TimeSpan maxDaysRange = maxDate - userDate;

@@ -35,8 +35,8 @@ namespace SeaSkyNavigator.Classes
                                      "to prepare for the weather ahead. And answer for all days that you've been given the forecast data." +
                                      "You will be receiving also the name of the location of the forecasts, so you need to always start your report saying you'll " +
                                      "be sailing to the location provided and give a little bit of info of the location (if you know any) and then the report as " +
-                                     "specified before. Feel free to format the location as you wish. " +
-                                     "Remember also to always start a new paragraph with this symbol \"=> \".");
+                                     "specified before. You must return the text formatted as a HTML code, with tags, bolding important information and doing your best " +
+                                     "to display the text in a pleasant way.");
 
         }
 
