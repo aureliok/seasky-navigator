@@ -7,11 +7,13 @@ using System.Text.Json;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Xml.Linq;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Cors;
 
 namespace SeaSkyNavigator.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [EnableCors("_myAllowSpecificOrigins")]
     public class SeaSkyNavigatorController : ControllerBase
     {
         private readonly CoordinatesGetter _coordinatesGetter;
@@ -43,6 +45,7 @@ namespace SeaSkyNavigator.Controllers
         ///
         /// </remarks>
         /// <returns></returns>
+
         [HttpPost]
         [Route("GiveMeTheForecastMate")]
         [SwaggerOperation(Summary = "Get a weather report from our SeaSky Navigator")]
