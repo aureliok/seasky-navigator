@@ -3,4 +3,46 @@
     font-weight: 400;
     font-style: normal;
   }
+
+body {
+  background-color: #77ACF1;
+}
+
+.title-text {
+  color: #000 !important;
+}
+
+.prompt-text {
+  color: #262A56 !important;
+  font-size: 1.3em;
+}
+
+.form-label {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
+#endDateHelp {
+  color: #464343;
+}
+
+.btn {
+  background-color: #262A56 !important;
+  border: 2px solid #000;
+  border-radius: 20px;
+}
+
+.btn:hover {
+  border-color: #F6F7D3;
   
+}
+
+input:focus {
+  border-color: black !important;
+}
+
+.p-3 {
+  background-color: white !important;
+  border-radius: 10px;
+  opacity: .5;
+}
