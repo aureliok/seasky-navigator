@@ -52,7 +52,7 @@ const clearPage = () => {
 };
 
 const sendApiRequest = (dataObj) => {
-    const apiUrl = 'https://localhost:7009/SeaSkyNavigator/GiveMeTheForecastMate';
+    const apiUrl = 'http://localhost:7009/SeaSkyNavigator/GiveMeTheForecastMate';
 
     weatherReportText.parentElement.style.opacity = .75;
     weatherReportText.innerHTML = "Hold fast, for the <strong>SeaSky Navigator</strong> is about to reveal the weather secrets!"
@@ -71,7 +71,6 @@ const sendApiRequest = (dataObj) => {
     })
         .then(data => {
           // clean output text
-          console.log(cleanOutputText(data));
           resetOutputBox();
           weatherReportText.parentElement.style.opacity = 1;
           weatherReportText.innerHTML = cleanOutputText(data);
