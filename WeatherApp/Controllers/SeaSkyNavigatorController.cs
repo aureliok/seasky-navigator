@@ -36,7 +36,7 @@ namespace SeaSkyNavigator.Controllers
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST /SeaSkyNavigator/GiveMeTheForecastMate
+        ///     GET /SeaSkyNavigator/GiveMeTheForecastMate
         ///     {
         ///        "address": "São Paulo",
         ///        "startDate": "2024-03-02",
