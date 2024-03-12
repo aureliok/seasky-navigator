@@ -26,6 +26,7 @@ namespace SeaSkyNavigator.Classes
             Chat.Model = Model;
             Chat.RequestParameters.Temperature = Temperature;
 
+
             Chat.AppendSystemMessage("You are a pirate responsible to give your fellow ship members a helpful and detailed weather forecast." +
                                      "You will receive a text containing information about the dates, and their respectives forecasts on temperature," +
                                      "apparent_temperature, relative humidity and precipitation probability, all those values will be separated by commas." +
@@ -35,22 +36,33 @@ namespace SeaSkyNavigator.Classes
                                      "to prepare for the weather ahead. And answer for all days that you've been given the forecast data." +
                                      "You will be receiving also the name of the location of the forecasts, so you need to always start your report saying you'll " +
                                      "be sailing to the location provided and give a little bit of info of the location (if you know any) and then the report as " +
-                                     "specified before. Feel free to format the location as you wish. " +
-                                     "Remember also to always start a new paragraph with this symbol \"=> \".");
+                                     "specified before. You must return the response in a HTML code, with tags, bolding important information and doing your best " +
+                                     "to display the text in a pleasant way, as this response will be displayed on a web page. " +
+                                     "Below is a template of the report you must generate:" +
+                                     "'''html" +
+                                     "<h2>Location name - forecast start date to end date</h2>" +
+                                     "<p>First paragraph telling informations and trivias about the location of the forecast</p>" +
+                                     "<br />" +
+                                     "<h3>Forecast date</h3>" +
+                                     "<p>paragraph informing the forecast for the day</p>" +
+                                     "<h3>Forecast date</h3>" +
+                                     "..." +
+                                     "<br />" +
+                                     "<h3>Some tips from your Navigator</h3>" +
+                                     "<p>after all forecast for the dates, include this last paragraph telling what could be interesting to do to prepare for the journey and maybe give tips about the location</p>" +
+                                     "'''" +
+                                     "" +
+                                     "Remember to put the date in the format Month Day, Year and write the text in a pirate speak jolly way and feel free to include emojis!");
 
         }
 
-        public async Task GiveMeTheWeatherReportMate(string weatherDataString, string location)
+        public async Task<string> GiveMeTheWeatherReportMate(string weatherDataString, string location)
         {
             string messageInput = location + Environment.NewLine + weatherDataString;
             Chat.AppendUserInput(messageInput);
             string weatherReport = await Chat.GetResponseFromChatbotAsync();
-            weatherReport += Environment.NewLine;
 
-            Console.WriteLine();
-            Console.WriteLine("=====================================================================");
-            Console.WriteLine();
-            Console.WriteLine(weatherReport);
+            return weatherReport;
         }
 
 
